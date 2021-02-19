@@ -24,9 +24,13 @@ export const GET_POST = gql`
       name
       description
       thumbnail {
-        url
+        url(width: 200)
       }
       votesCount
+      website
+      media {
+        url
+      }
     }
   }
 `;
