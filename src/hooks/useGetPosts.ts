@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { GET_POSTS } from '../services/productHunt/queries/post';
 
-type Order = 'RANKING' | 'NEWEST';
+export type Order = 'RANKING' | 'NEWEST';
 
 interface Posts {
   node: {
@@ -27,7 +27,6 @@ function useGetPosts(
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const { loading } = useQuery(GET_POSTS, {
-    fetchPolicy: 'no-cache',
     variables: {
       order,
     },

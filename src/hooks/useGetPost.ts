@@ -6,6 +6,8 @@ interface Post {
   name: string;
   votesCount: number;
   description: string;
+  website: string;
+  media: Array<{ url: string }>;
   thumbnail: {
     url: string;
   };
@@ -22,12 +24,11 @@ function useGetPosts(
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const { loading } = useQuery(GET_POST, {
-    fetchPolicy: 'no-cache',
     variables: {
       id,
     },
     onCompleted: data => {
-      if (data) {
+      if (data && data.post) {
         setPost(data.post);
       }
     },
