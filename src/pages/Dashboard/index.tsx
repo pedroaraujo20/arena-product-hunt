@@ -35,6 +35,8 @@ const Dashboard = () => {
     ));
   }, [loading, posts]);
 
+  if (errorMessage) return <h1>{errorMessage}</h1>;
+
   return (
     <>
       <Container>
