@@ -1,4 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import 'react-tabs/style/react-tabs.css';
 
 export default createGlobalStyle`
   * {
@@ -15,7 +17,7 @@ export default createGlobalStyle`
   }
 
   body, input, button {
-    font-family: 'Roboto Slab', serif;
+    font-family: 'Roboto', serif;
     font-size: 16px;
   }
 
