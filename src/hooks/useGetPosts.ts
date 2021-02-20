@@ -1,55 +1,57 @@
-import { useQuery } from '@apollo/client';
-import { useState } from 'react';
+import { ApolloError, NetworkStatus, useQuery } from '@apollo/client';
 import { GET_POSTS } from '../services/productHunt/queries/post';
 
 export type Order = 'RANKING' | 'NEWEST';
 
 interface Posts {
-  node: {
-    id: string;
-    name: string;
-    votesCount: number;
-    description: string;
-    thumbnail: {
-      url: string;
+  posts: {
+    pageInfo: {
+      endCursor: string;
+      hasNextPage: boolean;
     };
+    edges: Array<{
+      node: {
+        id: string;
+        name: string;
+        votesCount: number;
+        description: string;
+        thumbnail: {
+          url: string;
+        };
+      };
+    }>;
   };
 }
 
 function useGetPosts(
   order: Order,
+  first: number,
 ): {
-  posts: Posts[];
+  data: Posts;
   loading: boolean;
-  errorMessage: string;
+  error?: ApolloError;
+  fetchMore: Function;
+  networkStatus: NetworkStatus;
 } {
-  const [posts, setPosts] = useState<Posts[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
-  const { loading } = useQuery(GET_POSTS, {
-    variables: {
-      order,
+  const { data, loading, fetchMore, networkStatus, error } = useQuery(
+    GET_POSTS,
+    {
+      variables: {
+        order,
+        first,
+      },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-only',
     },
-    onCompleted: data => {
-      if (data) {
-        setPosts(data.posts.edges);
-      }
-    },
-    onError: err => {
-      if (err) {
-        const errMessage = err.graphQLErrors
-          .filter(({ extensions }) => extensions && extensions.toUser)
-          .map(({ message }) => message)
-          .join('\n');
-        setErrorMessage(errMessage || 'Ocorreu um erro inesperado');
-      }
-    },
-  });
+  );
 
   return {
-    posts,
+    data,
     loading,
-    errorMessage,
+    error,
+    fetchMore,
+    networkStatus,
   };
 }
 

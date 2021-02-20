@@ -1,52 +1,40 @@
-import { useQuery } from '@apollo/client';
-import { useState } from 'react';
+import { ApolloError, useQuery } from '@apollo/client';
 import { GET_POST } from '../services/productHunt/queries/post';
+import { Comment } from '../components/Comments';
 
 interface Post {
-  name: string;
-  votesCount: number;
-  description: string;
-  website: string;
-  media: Array<{ url: string }>;
-  thumbnail: {
-    url: string;
+  post: {
+    name: string;
+    votesCount: number;
+    description: string;
+    website: string;
+    media: Array<{ url: string }>;
+    thumbnail: {
+      url: string;
+    };
+    comments: {
+      edges: Comment[];
+    };
   };
 }
 
 function useGetPosts(
   id: string,
 ): {
-  post: Post;
+  data: Post;
   loading: boolean;
-  errorMessage: string;
+  error: ApolloError | undefined;
 } {
-  const [post, setPost] = useState<Post>({} as Post);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
-  const { loading } = useQuery(GET_POST, {
+  const { data, loading, error } = useQuery(GET_POST, {
     variables: {
       id,
-    },
-    onCompleted: data => {
-      if (data && data.post) {
-        setPost(data.post);
-      }
-    },
-    onError: err => {
-      if (err) {
-        const errMessage = err.graphQLErrors
-          .filter(({ extensions }) => extensions && extensions.toUser)
-          .map(({ message }) => message)
-          .join('\n');
-        setErrorMessage(errMessage || 'Ocorreu um erro inesperado');
-      }
     },
   });
 
   return {
-    post,
+    data,
     loading,
-    errorMessage,
+    error,
   };
 }
 

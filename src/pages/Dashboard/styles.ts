@@ -11,6 +11,14 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
 
+  .infinite-scroll {
+    width: 100%
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
   .react-tabs {
     display: flex;
     flex-direction: column;

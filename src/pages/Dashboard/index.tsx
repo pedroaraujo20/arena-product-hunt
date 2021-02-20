@@ -1,19 +1,26 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Tab, Tabs, TabPanel } from 'react-tabs';
-import ListItem from '../../components/ListItem';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Loading from '../../components/Loading';
+
 import { Order } from '../../hooks/useGetPosts';
 import { useGetPosts } from '../../hooks';
+import ListItem from '../../components/ListItem';
 
 import logo from '../../assets/logo.png';
 
 import { Container, StyledTabList, Logo } from './styles';
 
+const first = 10;
+
 const Dashboard = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [order, setOrder] = useState<Order>('RANKING');
 
-  const { posts, loading, errorMessage } = useGetPosts(order);
+  const { data, loading, error, fetchMore, networkStatus } = useGetPosts(
+    order,
+    first,
+  );
 
   const onSelectTab = useCallback((index: number) => {
     setTabIndex(index);
@@ -21,21 +28,45 @@ const Dashboard = () => {
   }, []);
 
   const renderPosts = useMemo(() => {
-    if (loading) return <Loading />;
+    const isRefetching = networkStatus === 3;
 
-    return posts.map(({ node: post }) => (
-      <ListItem
-        key={post.id}
-        id={post.id}
-        name={post.name}
-        description={post.description}
-        thumbnail={post.thumbnail.url}
-        votes={post.votesCount}
-      />
-    ));
-  }, [loading, posts]);
+    if (loading && !isRefetching) return <Loading />;
 
-  if (errorMessage) return <h1>{errorMessage}</h1>;
+    if (error) {
+      return <div>{error.message}</div>;
+    }
+
+    const { hasNextPage } = data.posts.pageInfo;
+
+    return (
+      <InfiniteScroll
+        dataLength={data.posts.edges.length}
+        hasMore={hasNextPage}
+        next={() => {
+          fetchMore({
+            variables: {
+              order,
+              first,
+              after: data.posts.pageInfo.endCursor,
+            },
+          });
+        }}
+        className="infinite-scroll"
+        loader={<Loading />}
+      >
+        {data.posts.edges.map(({ node: post }) => (
+          <ListItem
+            key={post.id}
+            id={post.id}
+            name={post.name}
+            description={post.description}
+            thumbnail={post.thumbnail.url}
+            votes={post.votesCount}
+          />
+        ))}
+      </InfiniteScroll>
+    );
+  }, [loading, data, networkStatus, fetchMore, order, error]);
 
   return (
     <>
