@@ -12,7 +12,7 @@ export const Container = styled.div`
   justify-content: center;
 
   .infinite-scroll {
-    width: 100%
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
