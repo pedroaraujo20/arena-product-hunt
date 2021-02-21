@@ -25,7 +25,7 @@ const comments: Comment[] = [
 ];
 
 describe('Comments component', () => {
-  it('should be able to render an comment', () => {
+  it('should be able to render comments', () => {
     const { getByText } = render(<Comments data={comments} />);
 
     expect(getByText('Pedro Araujo')).toBeTruthy();

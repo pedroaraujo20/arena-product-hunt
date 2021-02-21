@@ -13,7 +13,7 @@ const item: ListItemProps = {
 };
 
 describe('ListItem Component', () => {
-  it('Should render a List Item', () => {
+  it('should render a List Item', () => {
     const { findByText } = render(
       <Router>
         <ListItem {...item} />

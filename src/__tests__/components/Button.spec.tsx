@@ -4,7 +4,7 @@ import React from 'react';
 import Button from '../../components/Button';
 
 describe('Button Component', () => {
-  it('Should render button', () => {
+  it('should render button', () => {
     const { findByText } = render(<Button>Click here</Button>);
 
     const buttonElement = findByText('Click here');
