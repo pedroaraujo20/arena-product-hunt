@@ -3,7 +3,7 @@ import { FiHeart } from 'react-icons/fi';
 
 import { Container, TextCombination, Votes } from './styles';
 
-interface ListItemProps {
+export interface ListItemProps {
   id: string;
   thumbnail: string;
   name: string;
@@ -23,10 +23,10 @@ const ListItem = ({
     [description],
   );
 
-  const handleNavigate = useMemo(() => `/post?id=${id}`, [id]);
+  const navigationInfo = useMemo(() => `/post?id=${id}`, [id]);
 
   return (
-    <Container to={handleNavigate}>
+    <Container to={navigationInfo}>
       <img src={thumbnail} alt={name} />
 
       <TextCombination>

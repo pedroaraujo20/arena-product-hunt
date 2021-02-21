@@ -30,16 +30,17 @@ const Dashboard = () => {
   const renderPosts = useMemo(() => {
     const isRefetching = networkStatus === 3;
 
-    if (loading && !isRefetching) return <Loading />;
+    if (loading && !isRefetching) return <Loading test-id="loader" />;
 
     if (error) {
-      return <div>{error.message}</div>;
+      return <div test-id="error">{error.message}</div>;
     }
 
     const { hasNextPage } = data.posts.pageInfo;
 
     return (
       <InfiniteScroll
+        test-id="infinite-scroll"
         dataLength={data.posts.edges.length}
         hasMore={hasNextPage}
         next={() => {

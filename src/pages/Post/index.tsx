@@ -19,32 +19,46 @@ import {
 const Post: React.FC = () => {
   const query = useQueryParams();
 
-  const { data, loading } = useGetPost(query.get('id') as string);
+  const { data, loading, error } = useGetPost(query.get('id') as string);
 
   const renderPost = useMemo(() => {
-    if (loading) return <Loading />;
+    if (loading) return <Loading test-id="loader" />;
+
+    if (error) {
+      return <div test-id="error">{error.message}</div>;
+    }
+
+    const {
+      name,
+      thumbnail,
+      votesCount,
+      description,
+      media,
+      website,
+      comments,
+    } = data.post;
 
     return (
-      <PostContainer>
+      <PostContainer test-id="post-container">
         <CompanyHeader>
           <div>
-            <Thumbnail src={data.post.thumbnail.url} alt={data.post.name} />
-            <span>{data.post.name}</span>
+            <Thumbnail src={thumbnail.url} alt={name} />
+            <span>{name}</span>
           </div>
           <Votes>
             <FiHeart size={20} color="#c74f2f" />
-            <strong>{data.post.votesCount}</strong>
+            <strong>{votesCount}</strong>
           </Votes>
         </CompanyHeader>
-        <Description>{data.post.description}</Description>
-        <Media src={data.post.media[0].url} alt={data.post.name} />
-        <Button target="_blank" href={data.post.website}>
+        <Description>{description}</Description>
+        <Media src={media[0].url} alt={name} />
+        <Button target="_blank" href={website}>
           Official Website
         </Button>
-        <Comments data={data.post.comments.edges} />
+        <Comments data={comments.edges} />
       </PostContainer>
     );
-  }, [loading, data]);
+  }, [data, loading, error]);
 
   return <Container>{renderPost}</Container>;
 };

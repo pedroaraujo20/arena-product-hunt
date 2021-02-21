@@ -19,16 +19,13 @@ interface CommentsProps {
 const Comments = ({ data }: CommentsProps) => {
   return (
     <Container>
-      {data.map(commentInfo => (
-        <PostComment key={commentInfo.node.user.name}>
+      {data.map(({ node }) => (
+        <PostComment key={node.user.name}>
           <UserInfo>
-            <img
-              src={commentInfo.node.user.profileImage}
-              alt={commentInfo.node.user.name}
-            />
-            <span>{commentInfo.node.user.name}</span>
+            <img src={node.user.profileImage} alt={node.user.name} />
+            <span>{node.user.name}</span>
           </UserInfo>
-          <Body>{commentInfo.node.body}</Body>
+          <Body>{node.body}</Body>
         </PostComment>
       ))}
     </Container>

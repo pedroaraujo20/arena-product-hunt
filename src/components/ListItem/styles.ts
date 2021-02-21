@@ -28,7 +28,7 @@ export const Container = styled(Link)`
 
   &:hover {
     opacity: 0.8;
-    transform: translateX(50px);
+    transform: translateY(10px);
   }
 `;
 
