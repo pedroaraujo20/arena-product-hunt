@@ -1,8 +1,11 @@
 import React, { useMemo } from 'react';
 import { FiHeart } from 'react-icons/fi';
+
 import Button from '../../components/Button';
 import Comments from '../../components/Comments';
+import Error from '../../components/Error';
 import Loading from '../../components/Loading';
+
 import { useGetPost } from '../../hooks';
 import { useQueryParams } from '../../utils/useQueryParams';
 
@@ -25,7 +28,7 @@ const Post: React.FC = () => {
     if (loading) return <Loading test-id="loader" />;
 
     if (error) {
-      return <div test-id="error">{error.message}</div>;
+      return <Error message={error.message} test-id="error" />;
     }
 
     const {

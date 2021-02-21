@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Tab, Tabs, TabPanel } from 'react-tabs';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Loading from '../../components/Loading';
 
 import { Order } from '../../hooks/useGetPosts';
 import { useGetPosts } from '../../hooks';
+import Error from '../../components/Error';
 import ListItem from '../../components/ListItem';
+import Loading from '../../components/Loading';
 
 import logo from '../../assets/logo.png';
 
@@ -33,7 +34,7 @@ const Dashboard = () => {
     if (loading && !isRefetching) return <Loading test-id="loader" />;
 
     if (error) {
-      return <div test-id="error">{error.message}</div>;
+      return <Error message={error.message} test-id="error" />;
     }
 
     const { hasNextPage } = data.posts.pageInfo;
