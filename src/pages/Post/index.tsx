@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { FiHeart } from 'react-icons/fi';
 
 import Button from '../../components/Button';
@@ -24,46 +24,55 @@ const Post: React.FC = () => {
 
   const { data, loading, error } = useGetPost(query.get('id') as string);
 
-  const renderPost = useMemo(() => {
-    if (loading) return <Loading test-id="loader" />;
-
-    if (error) {
-      return <Error message={error.message} test-id="error" />;
-    }
-
-    const {
-      name,
-      thumbnail,
-      votesCount,
-      description,
-      media,
-      website,
-      comments,
-    } = data.post;
-
+  if (loading)
     return (
-      <PostContainer test-id="post-container">
-        <CompanyHeader>
-          <div>
-            <Thumbnail src={thumbnail.url} alt={name} />
-            <span>{name}</span>
-          </div>
-          <Votes>
-            <FiHeart size={20} color="#c74f2f" />
-            <strong>{votesCount}</strong>
-          </Votes>
-        </CompanyHeader>
-        <Description>{description}</Description>
-        <Media src={media[0].url} alt={name} />
-        <Button target="_blank" href={website}>
-          Official Website
-        </Button>
-        <Comments data={comments.edges} />
-      </PostContainer>
+      <Container>
+        <Loading test-id="loader" />
+      </Container>
     );
-  }, [data, loading, error]);
 
-  return <Container>{renderPost}</Container>;
+  if (error) {
+    return (
+      <Container>
+        <Error message={error.message} test-id="error" />
+      </Container>
+    );
+  }
+
+  const {
+    name,
+    thumbnail,
+    votesCount,
+    description,
+    media,
+    website,
+    comments,
+  } = data.post;
+
+  return (
+    <Container>
+      {data && (
+        <PostContainer test-id="post-container">
+          <CompanyHeader>
+            <div>
+              <Thumbnail src={thumbnail.url} alt={name} />
+              <span>{name}</span>
+            </div>
+            <Votes>
+              <FiHeart size={20} color="#c74f2f" />
+              <strong>{votesCount}</strong>
+            </Votes>
+          </CompanyHeader>
+          <Description>{description}</Description>
+          <Media src={media[0].url} alt={name} />
+          <Button target="_blank" href={website}>
+            Official Website
+          </Button>
+          <Comments data={comments.edges} />
+        </PostContainer>
+      )}
+    </Container>
+  );
 };
 
 export default Post;

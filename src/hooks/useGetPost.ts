@@ -2,7 +2,7 @@ import { ApolloError, useQuery } from '@apollo/client';
 import { GET_POST } from '../services/productHunt/queries/post';
 import { Comment } from '../components/Comments';
 
-interface Post {
+export interface Post {
   post: {
     name: string;
     votesCount: number;

@@ -3,7 +3,7 @@ import { GET_POSTS } from '../services/productHunt/queries/post';
 
 export type Order = 'RANKING' | 'NEWEST';
 
-interface Posts {
+export interface Posts {
   posts: {
     pageInfo: {
       endCursor: string;
